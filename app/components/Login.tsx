@@ -9,8 +9,10 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem("email", "usuario@exemplo.com");
-    localStorage.setItem("senha", "senha123");
+    if (!localStorage.getItem("email") && !localStorage.getItem("senha")) {
+      localStorage.setItem("email", "admin@exemplo.com");
+      localStorage.setItem("senha", "senha123");
+    }
   }, []);
   const login = () => {
     const email = localStorage.getItem("email");
