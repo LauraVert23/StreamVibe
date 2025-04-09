@@ -1,19 +1,18 @@
 import { Input } from "../components/ui/input";
 import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
-
+import { useNavigate, useActionData } from "react-router";
+export async function action() {
+  const email = "admin@exemplo.com";
+  const senha = "senha123";
+  localStorage.setItem("email", email);
+  localStorage.setItem("senha", senha);
+}
 function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!localStorage.getItem("email") && !localStorage.getItem("senha")) {
-      localStorage.setItem("email", "admin@exemplo.com");
-      localStorage.setItem("senha", "senha123");
-    }
-  }, []);
   const login = () => {
     const email = localStorage.getItem("email");
     const senha = localStorage.getItem("senha");
