@@ -1,7 +1,7 @@
 import { Input } from "../components/ui/input";
-import { Button } from "./ui/button";
-import { useState, useEffect } from "react";
-import { useNavigate, useActionData } from "react-router";
+import { Button } from "../components/ui/button";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 export async function action() {
   const email = "admin@exemplo.com";
   const senha = "senha123";

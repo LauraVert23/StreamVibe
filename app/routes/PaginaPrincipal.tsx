@@ -1,9 +1,13 @@
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 import { useLoaderData } from "react-router";
+import Logo from "../images/Logo.png";
+import { AlignRight } from "lucide-react";
+import type { FilmeProps } from "~/interfaces/filmeProps";
+import { CarouselDemo } from "~/components/Carrossel";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 async function getLista() {
   const filmes = await fetch(
-    "https://api.themoviedb.org/3/movie/popular?api_key=ed8ed527460694e8203a9865b9328154"
+    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`
   );
   console.log("filmes:", filmes);
   const data = await filmes.json();
@@ -19,24 +23,20 @@ export async function loader() {
     return [];
   }
 }
-interface FilmeProps {
-  id: number;
-  title: string;
-  backdrop_path: string;
-}
 
 export default function PaginaPrincipal() {
   const filmes = useLoaderData() as FilmeProps[];
   return (
     <div>
-      <h1 className="text-white">Início</h1>
-      <div className="">
-        {filmes.map((filme: FilmeProps) => (
-          <div className="text-white">
-            <p key={filme.id}>{filme.title}</p>
-            <img src={IMAGE_BASE_URL + filme.backdrop_path}></img>
-          </div>
-        ))}
+      <nav>
+        <div className="flex justify-between">
+          <img src={Logo}></img>
+          <AlignRight />
+        </div>
+      </nav>
+      <div></div>
+      <div className="flex justify-center pt-10">
+        <CarouselDemo filmes={filmes}></CarouselDemo>
       </div>
     </div>
   );
