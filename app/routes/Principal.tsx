@@ -1,39 +1,26 @@
-import { useLoaderData } from "react-router";
-import Logo from "../images/Logo.png";
-import { AlignRight } from "lucide-react";
+import { Outlet, useLoaderData } from "react-router";
 import type { FilmeProps } from "~/interfaces/filmeProps";
 import { CarouselDemo } from "~/components/Carrossel";
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+import Menu from "~/components/Menu";
+import type { Route } from "./+types/home";
 
-async function getLista() {
-  const filmes = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`
-  );
-  console.log("filmes:", filmes);
-  const data = await filmes.json();
-  console.log(data.results);
-  return data.results;
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "StreamVibe" }];
 }
 
 export async function loader() {
-  try {
-    return await getLista();
-  } catch (error) {
-    console.error("Erro ao buscar filmes:", error);
-    return [];
-  }
+  const filmes = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`
+  );
+  const data = await filmes.json();
+  return data.results;
 }
 
 export default function PaginaPrincipal() {
   const filmes = useLoaderData() as FilmeProps[];
   return (
     <div>
-      <nav>
-        <div className="flex justify-between">
-          <img src={Logo}></img>
-          <AlignRight />
-        </div>
-      </nav>
+      <Menu />
       <div></div>
       <div className="flex justify-center pt-10">
         <CarouselDemo filmes={filmes}></CarouselDemo>

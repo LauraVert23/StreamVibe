@@ -22,7 +22,7 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
                 <CardContent className="flex aspect-square items-center justify-center p-6">
                   <img
                     src={IMAGE_BASE_URL + filme.backdrop_path}
-                    onClick={() => navigate(`/DetalhesFilme/${filme.id}`)}
+                    onClick={() => navigate(`/detalhes/${filme.id}`)}
                   ></img>
                 </CardContent>
               </Card>
