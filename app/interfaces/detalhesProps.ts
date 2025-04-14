@@ -1,6 +1,10 @@
 export interface detalhesProps {
     id: number;
     title: string;
-    backdrop_path: string;
-    overview: string
+    poster_path: string;
+    overview: string;
+    release_date: string;
+    original_language:string;
+    vote_average:string;
+    genres: {id:string, name:string}[];
 }

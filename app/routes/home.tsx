@@ -3,6 +3,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
@@ -13,6 +14,7 @@ export async function action() {
   localStorage.setItem("email", email);
   localStorage.setItem("senha", senha);
 }
+
 function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
