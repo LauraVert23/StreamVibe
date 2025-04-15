@@ -24,6 +24,7 @@ export default function PaginaDetalhes() {
     <div>
       <Menu />
       <div className="flex flex-col items-center gap-2 mt-10">
+        <h1>{filme.title}</h1>
         <div className="flex aspect-square items-center justify-center p-4 ">
           <img
             className="rounded-md object-cover h-[450px] w-[300px]"
