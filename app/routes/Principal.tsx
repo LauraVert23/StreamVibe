@@ -34,7 +34,7 @@ export default function PaginaPrincipal() {
               ></img>
             </div>
             {filmes.slice(0, 9).map((filme: FilmeProps) => (
-              <div key={filme.id} className="flex justify-center ">
+              <div key={filme.id} className="flex justify-center  ">
                 <img
                   className="w-full h-auto object-cover rounded-md "
                   src={`https://image.tmdb.org/t/p/original${filme.backdrop_path}`}
@@ -44,7 +44,7 @@ export default function PaginaPrincipal() {
           </div>
         </div>
       </div>
-      <div className="flex justify-center pt-10">
+      <div className="flex justify-center pt-10 ">
         <CarouselDemo filmes={filmes}></CarouselDemo>
       </div>
     </div>
