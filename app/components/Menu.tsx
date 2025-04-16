@@ -5,7 +5,7 @@ export default function Menu() {
     <ul>
       <div className="flex justify-between mt-5 ml-2 mr-2">
         <img src={Logo}></img>
-        <div className="w-[40px] h-[35px]  border-3 rounded-md shadow-neutral-600 border-neutral-800 flex justify-center bg-neutral-900">
+        <div className="w-[40px] h-[35px]  border-3 rounded-md border-border flex justify-center bg-card ">
           <AlignRight color="#a29a9a" className="mt-0.75" />
         </div>
       </div>
