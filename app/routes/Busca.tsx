@@ -33,7 +33,7 @@ export default function Busca() {
 
       <div className=" flex flex-col justify-center mt-10">
         <input
-          className="w-full h-10 bg-neutral-900 rounded-md p-2 text-white"
+          className="w-full h-10 bg-foreground rounded-md p-2 text-primary"
           type="text"
           onBlur={(e) => {
             setSearchParams({ q: e.target.value });

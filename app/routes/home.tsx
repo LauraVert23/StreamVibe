@@ -33,15 +33,15 @@ function Login() {
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
           <header className="flex flex-col items-center gap-9"></header>
           <div className="max-w-[300px] w-full space-y-6 px-4">
-            <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-              <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+            <nav className="rounded-3xl border  p-6 dark:border-chart-1 space-y-4">
+              <p className="leading-6  dark:text-primary-foreground text-center">
                 Tela de Login
               </p>
             </nav>
           </div>
         </div>
       </div>
-      <div className="shadow-md rounded-lg px-2 py-3 bg-gray-950 w-[250px] mx-auto flex flex-col gap-2">
+      <div className="shadow-md rounded-lg px-2 py-3 bg-foreground w-[250px] mx-auto flex flex-col gap-2">
         <Input
           type="user"
           placeholder="Usuário"
@@ -54,7 +54,9 @@ function Login() {
             setPassword(e.target.value);
           }}
         />
-        <Button onClick={() => login()}>Entrar</Button>
+        <Button onClick={() => login()} className="bg-primary text-background ">
+          Entrar
+        </Button>
       </div>
     </div>
   );
