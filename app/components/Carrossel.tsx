@@ -2,7 +2,7 @@ import type { FilmeProps } from "~/interfaces/filmeProps";
 import { Card, CardContent, CardDescription } from "../components/ui/card";
 import { useNavigate } from "react-router";
 import { ArrowRight } from "lucide-react";
-import { ScrollArea, ScrollBar } from "../components/ui/scroll-area";
+
 import {
   Carousel,
   CarouselContent,

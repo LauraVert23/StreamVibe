@@ -3,6 +3,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import Menu from "~/components/Menu";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
@@ -29,7 +30,10 @@ function Login() {
   };
   return (
     <div className="flex flex-col  ">
-      <div className="flex items-center justify-center pt-16 pb-4">
+      <div>
+        <Menu />
+      </div>
+      <div className="flex items-center justify-center pt-14 pb-4">
         <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
           <header className="flex flex-col items-center gap-9"></header>
           <div className="max-w-[300px] w-full space-y-6 px-4">
@@ -45,11 +49,13 @@ function Login() {
         <Input
           type="user"
           placeholder="Usuário"
+          className="text-primary"
           onChange={(e) => setUsuario(e.target.value)}
         />
         <Input
           type="password"
           placeholder="Senha"
+          className="text-primary"
           onChange={(e) => {
             setPassword(e.target.value);
           }}

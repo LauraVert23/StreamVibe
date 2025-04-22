@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { Star, StarHalf } from "lucide-react";
 
 export default function Estrelas({ nota }: { nota: string }) {
   const avaliacao = parseFloat(nota) / 2;
@@ -11,7 +11,9 @@ export default function Estrelas({ nota }: { nota: string }) {
       {Array.from({ length: estrelasPreenchidas }).map((_, i) => (
         <Star color="#dc2626" key={`filled-${i}`} size={20} fill="#dc2626" />
       ))}
-      {estrelaParcial && <Star color="#f87171" key="partial" size={20} />}
+      {estrelaParcial && (
+        <StarHalf color="#dc2626" fill="#dc2626" key="partial" size={20} />
+      )}
       {Array.from({ length: estrelasVazias }).map((_, i) => (
         <Star color="#a1a1aa" fill="#a1a1aa" key={`empty-${i}`} size={20} />
       ))}

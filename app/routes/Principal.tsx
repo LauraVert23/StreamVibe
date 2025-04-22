@@ -52,7 +52,7 @@ export default function PaginaPrincipal() {
             </p>
           </div>
           <div className="items-center flex flex-col">
-            <CarouselDemo filmes={filmes}></CarouselDemo>
+            <CarouselDemo filmes={filmes} />
           </div>
         </div>
       </div>
