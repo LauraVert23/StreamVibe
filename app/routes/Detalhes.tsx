@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router";
+import { useLocalStorage } from "usehooks-ts";
 import Menu from "~/components/Menu";
 import type { detalhesProps } from "~/interfaces/detalhesProps";
 import type { Route } from "./+types/home";
@@ -15,9 +16,11 @@ import Estrelas from "~/components/Estrelas";
 import type { FilmeProps } from "~/interfaces/filmeProps";
 import { CarouselDemo } from "~/components/Carrossel";
 import { Button } from "~/components/ui/button";
+import { useEffect, useState } from "react";
+import type { FavoritoProps } from "~/interfaces/favoritoProps";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
-
+import erro from "../images/LogoCinza.png";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
@@ -28,7 +31,6 @@ export async function loader({ params }: { params: { id: string } }) {
   const similaresResponse = await fetch(
     `https://api.themoviedb.org/3/movie/${params.id}/similar?api_key=${process.env.REACT_APP_API_KEY}`
   );
-
   const filme = await filmeResponse.json();
   const similares = await similaresResponse.json();
 
@@ -41,6 +43,19 @@ export default function PaginaDetalhes() {
     similares: FilmeProps[];
   };
   const avaliacao = parseFloat(filme.vote_average) / 2;
+
+  const [favoritosFilmes, setFavoritosFilmes] = useLocalStorage<
+    FavoritoProps[]
+  >("favoritos", []);
+
+  const filmeFavorito = favoritosFilmes.find((item) => item.id === filme.id);
+  const favoritar = (id: number) => {
+    if (filmeFavorito) {
+      setFavoritosFilmes(favoritosFilmes.filter((filme) => filme.id !== id));
+    } else {
+      setFavoritosFilmes([...favoritosFilmes, { id, favorito: true }]);
+    }
+  };
 
   return (
     <div>
@@ -57,7 +72,14 @@ export default function PaginaDetalhes() {
                 <Plus color="white" />
               </div>
               <div className="w-fit bg-background border-2 border-ring rounded-md p-1">
-                <ThumbsUp color="white" />
+                <ThumbsUp
+                  color="white"
+                  fill={filmeFavorito?.favorito ? "red" : undefined}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    favoritar(filme.id);
+                  }}
+                />
               </div>
               <div className="w-fit bg-background border-2 border-ring rounded-md p-1">
                 <Volume2 color="white" />
@@ -67,6 +89,9 @@ export default function PaginaDetalhes() {
           <img
             className="rounded-md object-cover h-[450px] w-[300px]"
             src={IMAGE_BASE_URL + filme.poster_path}
+            onError={(e) => {
+              e.currentTarget.src = erro;
+            }}
           ></img>
         </div>
         <div className="bg-foreground flex flex-col justify-center gap-1 w-[300px] minh-[180px] rounded-md p-2">
