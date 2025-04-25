@@ -16,11 +16,11 @@ import Estrelas from "~/components/Estrelas";
 import type { FilmeProps } from "~/interfaces/filmeProps";
 import { CarouselDemo } from "~/components/Carrossel";
 import { Button } from "~/components/ui/button";
-import { useEffect, useState } from "react";
 import type { FavoritoProps } from "~/interfaces/favoritoProps";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 import erro from "../images/LogoCinza.png";
+import { useEffect, useState } from "react";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
@@ -43,10 +43,17 @@ export default function PaginaDetalhes() {
     similares: FilmeProps[];
   };
   const avaliacao = parseFloat(filme.vote_average) / 2;
-
+  const [isClient, setIsClient] = useState(false);
   const [favoritosFilmes, setFavoritosFilmes] = useLocalStorage<
     FavoritoProps[]
   >("favoritos", []);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  if (!isClient) {
+    return null;
+  }
 
   const filmeFavorito = favoritosFilmes.find((item) => item.id === filme.id);
   const favoritar = (id: number) => {
@@ -61,7 +68,7 @@ export default function PaginaDetalhes() {
     <div>
       <Menu />
       <div className="flex flex-col items-center gap-2 ">
-        <div className="flex aspect-square items-center justify-center p-4 relative ">
+        <div className="flex aspect-square items-center justify-center p-4 relative w-[100%] ">
           <div className="absolute inset-0 flex justify-center items-center flex-col gap-2 mt-20">
             <Button className="bg-chart-5 w-[200px]">
               <Play fill="#fafafa" />

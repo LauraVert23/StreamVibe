@@ -15,23 +15,28 @@ import { useMediaQuery } from "usehooks-ts";
 export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
   const navigate = useNavigate();
   const isMd = useMediaQuery("(min-width: 768px)");
+  const isLg = useMediaQuery("(min-width: 1024px)");
+
   return (
     <Carousel
-      className="w-[300px] h-[400px] gap-2 md:w-[700px] md:h-[500px] lg:w-[800px] lg:h-[600px] xl:w-[1000px] xl:h-[700px]"
+      className="w-[300px] h-[200px] gap-2 md:w-[700px] lg:h-[300px] lg:w-[900px]  xl:w-[1200px] 2xl:w-[1500px] 2xl:h-[400px] "
       opts={{
-        slidesToScroll: isMd ? 4 : 2,
+        slidesToScroll: isLg ? 5 : isMd ? 4 : 2,
         align: "start",
         loop: true,
       }}
     >
       <CarouselContent>
         {filmes.map((filme: FilmeProps) => (
-          <CarouselItem className="basis-1/2 md:basis-1/4" key={filme.id}>
+          <CarouselItem
+            className="basis-1/2 md:basis-1/4 lg:basis-1/5"
+            key={filme.id}
+          >
             <div className="p-1">
               <Card className=" flex flex-col gap-10">
-                <CardContent className="flex aspect-square flex-col justify-center p-2">
+                <CardContent className="flex aspect-square flex-col justify-center p-2 ">
                   <img
-                    className="w-full h-full object-cover rounded-md"
+                    className="w-full h-full object-cover rounded-md mask-b-from-30% mask-radial-[100%_100%] mask-radial-from-20%"
                     src={IMAGE_BASE_URL + filme.backdrop_path}
                     onClick={() => navigate(`/detalhes/${filme.id}`)}
                     onError={(e) => (e.currentTarget.src = erro)}
