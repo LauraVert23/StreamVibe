@@ -12,12 +12,17 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader() {
-  const filmes = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&page=1`
+  const res1 = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`
+  );
+  const res2 = await fetch(
+    `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}&page=2`
   );
 
-  const data = await filmes.json();
-  return data.results;
+  const data1 = await res1.json();
+  const data2 = await res2.json();
+
+  return [...data1.results, ...data2.results];
 }
 
 export default function PaginaPrincipal() {
@@ -25,9 +30,9 @@ export default function PaginaPrincipal() {
   const isMd = useMediaQuery("(min-width: 768px)");
   const isLg = useMediaQuery("(min-width:1024px)");
   const filmesParaMostrar = isLg
-    ? filmes.slice(0, 20)
+    ? filmes.slice(0, 40)
     : isMd
-    ? filmes.slice(0, 16)
+    ? filmes.slice(0, 20)
     : filmes.slice(0, 9);
   return (
     <div className=" flex flex-col">
@@ -36,7 +41,7 @@ export default function PaginaPrincipal() {
       </div>
       <div className="flex flex-col justify-center items-center gap-3">
         <div
-          className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5  gap-2 w-[100%] h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[850px] relative 
+          className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8  gap-2 w-[100%] h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[850px] relative 
         mask-radial-[75%_75%] mask-b-from-50% mask-radial-from-40%
       "
         >
