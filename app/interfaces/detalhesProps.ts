@@ -7,4 +7,5 @@ export interface detalhesProps {
     original_language:string;
     vote_average:string;
     genres: {id:string, name:string}[];
+    production_companies: {id:number, name:string, logo_path:string}[];
 }
