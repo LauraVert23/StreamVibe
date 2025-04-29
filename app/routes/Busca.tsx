@@ -5,6 +5,14 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 import { Card, CardContent, CardDescription } from "../components/ui/card";
 import Menu from "~/components/Menu";
 import erro from "../images/LogoCinza.png";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "~/components/ui/pagination";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
@@ -26,7 +34,7 @@ export default function Busca() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
-  const page = Number(searchParams.get("page") || 1);
+  const page = Number(searchParams.get("page"));
   return (
     <div>
       <div>
@@ -38,14 +46,18 @@ export default function Busca() {
           className="w-full max-w-[98%] h-10 bg-foreground rounded-md p-2 text-primary"
           type="text"
           placeholder="Digite o nome do filme"
+          value={query ?? ""}
           onChange={(e) => {
             setSearchParams({ q: e.target.value });
           }}
         />
         {query ? (
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 lg:gap-5 justify-center">
             {pesquisa.results.map((filme: detalhesProps) => (
-              <Card className="w-[150px] h-full" key={filme.id}>
+              <Card
+                className="w-[150px] lg:w-[200px] xl:w-[250px] h-full"
+                key={filme.id}
+              >
                 <CardContent className="flex aspect-square flex-col justify-center p-2 gap-2">
                   <img
                     className="object-cover rounded-md h-[150px]"
@@ -61,32 +73,113 @@ export default function Busca() {
         ) : (
           <h1 className="text-chart-5">Faça uma busca</h1>
         )}
+        {page < 1 ? (
+          <Pagination>
+            <PaginationContent className="gap-2 md:gap-3">
+              {page < pesquisa.total_pages && (
+                <PaginationItem className="bg-chart-2 rounded-md">
+                  <PaginationLink href={`?q=${query}&page=${page + 1}`}>
+                    {page + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  className="w-full"
+                  href={`?q=${query}&page=${Math.min(
+                    pesquisa.total_pages,
+                    page + 1
+                  )}`}
+                  aria-disabled={page === pesquisa.total_pages}
+                ></PaginationNext>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        ) : page === pesquisa.total_pages ? (
+          <Pagination>
+            <PaginationContent className="gap-2 md:gap-3">
+              <PaginationItem>
+                <PaginationPrevious
+                  className="w-full"
+                  href={`?q=${query}&page=${Math.max(1, page - 1)}`}
+                  aria-disabled={page === 1}
+                ></PaginationPrevious>
+              </PaginationItem>
+              {page > 1 && (
+                <PaginationItem className="bg-chart-2 rounded-md">
+                  <PaginationLink href={`?q=${query}&page=${page - 1}`}>
+                    {page - 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem className="bg-destructive rounded-md">
+                <PaginationLink href={`?q=${query}&page=${page}`}>
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
 
-        {/* {pesquisa.total_pages > 1 && (
-          <div className="flex gap-2 justify-center my-4">
-            {Array.from({ length: Math.min(pesquisa.total_pages, 10) }).map(
-              (_, idx) => {
-                const pageNum = idx + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    className={`px-3 py-1 rounded ${
-                      pageNum === page ? "bg-destructive text-white" : "bg-ring"
-                    }`}
-                    onClick={() =>
-                      setSearchParams({
-                        q: query || "",
-                        page: pageNum.toString(),
-                      })
-                    }
-                  >
-                    {pageNum}
-                  </button>
-                );
-              }
-            )}
-          </div>
-        )} */}
+              {page < pesquisa.total_pages && (
+                <PaginationItem className="bg-chart-2 rounded-md">
+                  <PaginationLink href={`?q=${query}&page=${page + 1}`}>
+                    {page + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  className="w-full"
+                  href={`?q=${query}&page=${Math.min(
+                    pesquisa.total_pages,
+                    page + 1
+                  )}`}
+                  aria-disabled={page === pesquisa.total_pages}
+                ></PaginationNext>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        ) : (
+          <Pagination>
+            <PaginationContent className="gap-2 md:gap-3">
+              <PaginationItem>
+                <PaginationPrevious
+                  className="w-full"
+                  href={`?q=${query}&page=${Math.max(1, page - 1)}`}
+                  aria-disabled={page === 1}
+                ></PaginationPrevious>
+              </PaginationItem>
+              {page > 1 && (
+                <PaginationItem className="bg-chart-2 rounded-md">
+                  <PaginationLink href={`?q=${query}&page=${page - 1}`}>
+                    {page - 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem className="bg-destructive rounded-md">
+                <PaginationLink href={`?q=${query}&page=${page}`}>
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+
+              {page < pesquisa.total_pages && (
+                <PaginationItem className="bg-chart-2 rounded-md">
+                  <PaginationLink href={`?q=${query}&page=${page + 1}`}>
+                    {page + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  className="w-full"
+                  href={`?q=${query}&page=${Math.min(
+                    pesquisa.total_pages,
+                    page + 1
+                  )}`}
+                  aria-disabled={page === pesquisa.total_pages}
+                ></PaginationNext>
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );

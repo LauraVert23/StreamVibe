@@ -104,7 +104,7 @@ export default function PaginaDetalhes() {
             </div>
           </div>
           <img
-            className=" w-full h-[400px] lg:h-[500px] xl:h-[700px] object-cover rounded-md "
+            className=" w-full h-[400px] lg:h-[500px] xl:h-[700px] object-cover object-[25%_20%] rounded-md "
             src={IMAGE_BASE_URL + filme.poster_path}
             onError={(e) => {
               e.currentTarget.src = erro;
