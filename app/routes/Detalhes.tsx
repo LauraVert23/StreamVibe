@@ -75,7 +75,7 @@ export default function PaginaDetalhes() {
                 {filme.title}
               </h1>
               <p className="text-primary-foreground lg:text-lg xl:text-2xl">
-                {filme.overview}
+                {filme.overview.split(".")[0]}
               </p>
             </div>
             <div className="flex md:flex-row gap-2 xl:gap-4 flex-col items-center">
@@ -111,12 +111,13 @@ export default function PaginaDetalhes() {
             }}
           ></img>
         </div>
+
         <div
           className="flex flex-col gap-5 md:flex-row w-[300px]  md:w-[740px] lg:w-[1000px]  
-        xl:w-[1400px] 2xl:w-[1500px]  items-center md:items-baseline"
+        xl:w-[1400px] 2xl:w-[1500px]  items-center md:items-baseline "
         >
           <div className="flex-col gap-3 flex">
-            <div className="bg-foreground flex flex-col  gap-1  h-[170px] md:h-[150px] rounded-md p-2">
+            <div className="bg-foreground flex flex-col  gap-1  min-h-[170px] md:min-h-[150px] rounded-md p-2">
               <h5 className="text-muted-foreground xl:text-xl">Descrição</h5>
               <div>
                 <p className="text-primary-foreground xl:text-xl">
@@ -137,7 +138,7 @@ export default function PaginaDetalhes() {
               </div>
             </div>
           </div>
-          <div className="bg-foreground flex flex-col justify-center xl:text-xl  rounded-md p-2 gap-3">
+          <div className="bg-foreground flex flex-col justify-center min-w-[300px] rounded-md p-2 gap-3 lg:text-xl">
             <div className="flex flex-row gap-3">
               <Calendar color="#464444" />
               <h3 className="text-muted-foreground">Data de Lançamento</h3>

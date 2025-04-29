@@ -6,7 +6,7 @@ export default function Menu() {
   const navigate = useNavigate();
   return (
     <div>
-      <div className="flex justify-between mt-5 ml-2 mr-2 ">
+      <div className="flex justify-between mt-2 ml-2 mr-2 ">
         <img className="lg:w-[150px] xl:w-[200px]" src={Logo}></img>
         <Menubar className="mt-1 hidden md:flex -ml-15  lg:-ml-22 lg:mt-2 xl:-ml-35 xl:mt-5 border-4 rounded-md border-border bg-foreground w-fill h-[35px] lg:h-[40px] xl:h-[45px] 2xl:h-[50px] gap-1">
           <MenubarMenu>
