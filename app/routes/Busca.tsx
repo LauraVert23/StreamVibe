@@ -35,20 +35,21 @@ export default function Busca() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const page = Number(searchParams.get("page"));
+
   return (
     <div>
       <div>
         <Menu />
       </div>
 
-      <div className=" flex flex-col justify-center mt-10 gap-3 items-center mb-3">
+      <div className=" flex flex-col justify-center mt-10 gap-3 items-center mb-3 xl:gap-8">
         <input
-          className="w-full max-w-[98%] h-10 bg-foreground rounded-md p-2 text-primary"
+          className="w-full max-w-[98%] h-10 bg-foreground rounded-md p-2 text-primary xl:h-15 lg:text-lg"
           type="text"
           placeholder="Digite o nome do filme"
           value={query ?? ""}
           onChange={(e) => {
-            setSearchParams({ q: e.target.value });
+            setSearchParams({ q: e.target.value, page: "1" });
           }}
         />
         {query ? (
@@ -71,112 +72,56 @@ export default function Busca() {
             ))}
           </div>
         ) : (
-          <h1 className="text-chart-5">Faça uma busca</h1>
+          <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
+            Faça uma busca
+          </h1>
         )}
         {page < 1 ? (
-          <Pagination>
-            <PaginationContent className="gap-2 md:gap-3">
-              {page < pesquisa.total_pages && (
-                <PaginationItem className="bg-chart-2 rounded-md">
-                  <PaginationLink href={`?q=${query}&page=${page + 1}`}>
-                    {page + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              )}
-              <PaginationItem>
-                <PaginationNext
-                  className="w-full"
-                  href={`?q=${query}&page=${Math.min(
-                    pesquisa.total_pages,
-                    page + 1
-                  )}`}
-                  aria-disabled={page === pesquisa.total_pages}
-                ></PaginationNext>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        ) : page === pesquisa.total_pages ? (
-          <Pagination>
-            <PaginationContent className="gap-2 md:gap-3">
-              <PaginationItem>
-                <PaginationPrevious
-                  className="w-full"
-                  href={`?q=${query}&page=${Math.max(1, page - 1)}`}
-                  aria-disabled={page === 1}
-                ></PaginationPrevious>
-              </PaginationItem>
-              {page > 1 && (
-                <PaginationItem className="bg-chart-2 rounded-md">
-                  <PaginationLink href={`?q=${query}&page=${page - 1}`}>
-                    {page - 1}
-                  </PaginationLink>
-                </PaginationItem>
-              )}
-              <PaginationItem className="bg-destructive rounded-md">
-                <PaginationLink href={`?q=${query}&page=${page}`}>
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-
-              {page < pesquisa.total_pages && (
-                <PaginationItem className="bg-chart-2 rounded-md">
-                  <PaginationLink href={`?q=${query}&page=${page + 1}`}>
-                    {page + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              )}
-              <PaginationItem>
-                <PaginationNext
-                  className="w-full"
-                  href={`?q=${query}&page=${Math.min(
-                    pesquisa.total_pages,
-                    page + 1
-                  )}`}
-                  aria-disabled={page === pesquisa.total_pages}
-                ></PaginationNext>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <></>
         ) : (
           <Pagination>
-            <PaginationContent className="gap-2 md:gap-3">
-              <PaginationItem>
-                <PaginationPrevious
-                  className="w-full"
-                  href={`?q=${query}&page=${Math.max(1, page - 1)}`}
-                  aria-disabled={page === 1}
-                ></PaginationPrevious>
-              </PaginationItem>
+            <PaginationContent className="gap-2 md:gap-3 xl:gap-5">
               {page > 1 && (
-                <PaginationItem className="bg-chart-2 rounded-md">
-                  <PaginationLink href={`?q=${query}&page=${page - 1}`}>
-                    {page - 1}
-                  </PaginationLink>
-                </PaginationItem>
+                <>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className="w-full"
+                      href={`?q=${query}&page=${Math.max(1, page - 1)}`}
+                      aria-disabled={page === 1}
+                    ></PaginationPrevious>
+                  </PaginationItem>
+                  <PaginationItem className="bg-chart-2 rounded-md xl:p-0.5 xl:justify-center hidden md:flex">
+                    <PaginationLink href={`?q=${query}&page=${page - 1}`}>
+                      {page - 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
               )}
-              <PaginationItem className="bg-destructive rounded-md">
+              <PaginationItem className="bg-destructive rounded-md xl:p-0.5 xl:justify-center">
                 <PaginationLink href={`?q=${query}&page=${page}`}>
                   {page}
                 </PaginationLink>
               </PaginationItem>
 
               {page < pesquisa.total_pages && (
-                <PaginationItem className="bg-chart-2 rounded-md">
-                  <PaginationLink href={`?q=${query}&page=${page + 1}`}>
-                    {page + 1}
-                  </PaginationLink>
-                </PaginationItem>
+                <>
+                  <PaginationItem className="bg-chart-2 rounded-md hidden md:flex xl:p-0.5 xl:justify-center">
+                    <PaginationLink href={`?q=${query}&page=${page + 1}`}>
+                      {page + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext
+                      className="w-full"
+                      href={`?q=${query}&page=${Math.min(
+                        pesquisa.total_pages,
+                        page + 1
+                      )}`}
+                      aria-disabled={page === pesquisa.total_pages}
+                    ></PaginationNext>
+                  </PaginationItem>
+                </>
               )}
-              <PaginationItem>
-                <PaginationNext
-                  className="w-full"
-                  href={`?q=${query}&page=${Math.min(
-                    pesquisa.total_pages,
-                    page + 1
-                  )}`}
-                  aria-disabled={page === pesquisa.total_pages}
-                ></PaginationNext>
-              </PaginationItem>
             </PaginationContent>
           </Pagination>
         )}

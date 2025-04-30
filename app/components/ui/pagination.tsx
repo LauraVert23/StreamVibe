@@ -74,7 +74,7 @@ function PaginationPrevious({
       aria-label="Go to previous page"
       size="default"
       className={cn(
-        "gap-0.5 px-2 sm:pl-2.5 bg-chart-2 justify-center lg:text-lg",
+        "gap-0.5 px-2 sm:pl-2.5 bg-chart-2 justify-center lg:text-lg lg:w-[110px]",
         className
       )}
       {...props}
@@ -94,7 +94,7 @@ function PaginationNext({
       aria-label="Go to next page"
       size="default"
       className={cn(
-        "gap-0.5 px-2 sm:pr-2.5 bg-chart-2 justify-center lg:text-lg",
+        "gap-0.5 px-2 sm:pr-2.5 bg-chart-2 justify-center lg:text-lg lg:w-[110px]",
         className
       )}
       {...props}

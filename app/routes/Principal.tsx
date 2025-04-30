@@ -7,6 +7,7 @@ import type { Route } from "./+types/home";
 import { useMediaQuery } from "usehooks-ts";
 import { useEffect, useState } from "react";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+import erro from "../images/LogoCinza.png";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
@@ -69,6 +70,9 @@ export default function PaginaPrincipal() {
               <img
                 className="w-full h-auto object-cover rounded-md "
                 src={IMAGE_BASE_URL + filme.backdrop_path}
+                onError={(e) => {
+                  e.currentTarget.src = erro;
+                }}
               ></img>
             </div>
           ))}

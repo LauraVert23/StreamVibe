@@ -14,7 +14,7 @@ export default function Menu() {
               onClick={(e) => {
                 navigate("/principal");
               }}
-              className="text-sm lg:text-base xl:text-lg 2xl:text-xl text-ring font-semibold bg-card"
+              className="text-sm lg:text-base xl:text-lg 2xl:text-xl text-ring font-semibold bg-card cursor-pointer hover:bg-border"
             >
               Home
             </MenubarTrigger>
@@ -22,7 +22,7 @@ export default function Menu() {
               onClick={(e) => {
                 navigate("/");
               }}
-              className="text-sm lg:text-base xl:text-lg 2xl:text-xl text-ring font-semibold"
+              className="text-sm lg:text-base xl:text-lg 2xl:text-xl text-ring font-semibold cursor-pointer hover:bg-border"
             >
               Login
             </MenubarTrigger>
