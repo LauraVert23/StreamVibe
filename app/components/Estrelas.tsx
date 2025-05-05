@@ -1,4 +1,4 @@
-import { Star, StarHalf } from "lucide-react";
+import { Star } from "lucide-react";
 
 export default function Estrelas({ nota }: { nota: string }) {
   const avaliacao = parseFloat(nota) / 2;
@@ -12,7 +12,6 @@ export default function Estrelas({ nota }: { nota: string }) {
         <Star color="#dc2626" key={`filled-${i}`} size={20} fill="#dc2626" />
       ))}
       {estrelaParcial && (
-        // <Star color="#dc2626" fill="#dc2626" key="partial" size={20} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"

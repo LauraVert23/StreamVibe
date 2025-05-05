@@ -34,9 +34,9 @@ export default function Login() {
   };
   return (
     <div className="flex flex-col gap-5 ">
-      <div className="flex justify-center mt-15 ml-2 mr-2">
+      <div className="flex justify-center mt-15 lg:mt-25 ml-2 mr-2">
         <img
-          className="md:w-[150px] lg:w-[200px] xl:w-[250px] object-cover"
+          className="md:w-[150px] lg:w-[200px] object-cover"
           src={Logo}
         ></img>
       </div>
@@ -49,7 +49,7 @@ export default function Login() {
       <div className="flex items-center justify-center  pb-4">
         <div className="flex-1 flex flex-col items-center gap-5 min-h-0">
           <header className="flex flex-col items-center gap-9"></header>
-          <div className="max-w-[250px] w-full space-y-6 px-4 md:max-w-[300px] lg:max-w-[400px]">
+          <div className="max-w-[250px] w-full space-y-6 px-4 md:max-w-[300px] lg:max-w-[350px]">
             <nav className="rounded-3xl border-2  p-5 border-destructive space-y-4 lg:p-8">
               <p className="leading-6  text-chart-5 text-center">
                 Tela de Login

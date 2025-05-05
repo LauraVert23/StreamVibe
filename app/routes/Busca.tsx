@@ -13,6 +13,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
+import { useEffect, useState } from "react";
+import { SkeletonCard } from "~/components/SkeletonCard";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
@@ -35,6 +37,14 @@ export default function Busca() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const page = Number(searchParams.get("page"));
+  const [finishedTimeout, setFinishedTimeout] = useState(false);
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setFinishedTimeout(true);
+    }, 1600);
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <div>
@@ -53,23 +63,27 @@ export default function Busca() {
           }}
         />
         {query ? (
-          <div className="flex flex-wrap gap-3 lg:gap-5 justify-center">
-            {pesquisa.results.map((filme: detalhesProps) => (
-              <Card
-                className="w-[150px] lg:w-[200px] xl:w-[250px] h-full"
-                key={filme.id}
-              >
-                <CardContent className="flex aspect-square flex-col justify-center p-2 gap-2">
-                  <img
-                    className="object-cover rounded-md h-[150px]"
-                    onClick={() => navigate(`/detalhes/${filme.id}`)}
-                    src={IMAGE_BASE_URL + filme.poster_path}
-                    onError={(e) => (e.currentTarget.src = erro)}
-                  ></img>
-                  <CardDescription>{filme.title}</CardDescription>
-                </CardContent>
-              </Card>
-            ))}
+          <div>
+            {!finishedTimeout && <SkeletonCard></SkeletonCard>}
+            <div className="flex flex-wrap gap-3 lg:gap-5 justify-center">
+              {pesquisa.results.map((filme: detalhesProps) => (
+                <Card
+                  className="w-[150px] lg:w-[200px] xl:w-[250px] h-full"
+                  key={filme.id}
+                >
+                  <CardContent className="flex aspect-square flex-col justify-center p-2 gap-2">
+                    <img
+                      className="object-cover rounded-md h-[150px]"
+                      onClick={() => navigate(`/detalhes/${filme.id}`)}
+                      src={IMAGE_BASE_URL + filme.poster_path}
+                      onError={(e) => (e.currentTarget.src = erro)}
+                    ></img>
+
+                    <CardDescription>{filme.title}</CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         ) : (
           <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
