@@ -1,4 +1,9 @@
-import { useLoaderData, useNavigate, useSearchParams } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "react-router";
 import type { Route } from "../+types/root";
 import type { detalhesProps } from "~/interfaces/detalhesProps";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
@@ -13,7 +18,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
-import { useEffect, useState } from "react";
+import React from "react";
 import { SkeletonCard } from "~/components/SkeletonCard";
 
 export function meta({}: Route.MetaArgs) {
@@ -28,23 +33,17 @@ export async function loader({ request }: Route.LoaderArgs) {
     `https://api.themoviedb.org/3/search/movie?query=${searchParams}&page=${page}&api_key=${process.env.REACT_APP_API_KEY}`
   );
   const data = await pesquisa.json();
-  return data;
+  let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 1000));
+  return { nonCriticalData };
 }
 
 export default function Busca() {
-  const pesquisa = useLoaderData();
+  const { nonCriticalData } = useLoaderData();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const page = Number(searchParams.get("page"));
-  const [finishedTimeout, setFinishedTimeout] = useState(false);
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      setFinishedTimeout(true);
-    }, 1600);
-    return () => clearTimeout(id);
-  }, []);
+  const quant = 4;
 
   return (
     <div>
@@ -62,83 +61,102 @@ export default function Busca() {
             setSearchParams({ q: e.target.value, page: "1" });
           }}
         />
-        {query ? (
-          <div>
-            {!finishedTimeout && <SkeletonCard></SkeletonCard>}
-            <div className="flex flex-wrap gap-3 lg:gap-5 justify-center">
-              {pesquisa.results.map((filme: detalhesProps) => (
-                <Card
-                  className="w-[150px] lg:w-[200px] xl:w-[250px] h-full"
-                  key={filme.id}
-                >
-                  <CardContent className="flex aspect-square flex-col justify-center p-2 gap-2">
-                    <img
-                      className="object-cover rounded-md h-[150px]"
-                      onClick={() => navigate(`/detalhes/${filme.id}`)}
-                      src={IMAGE_BASE_URL + filme.poster_path}
-                      onError={(e) => (e.currentTarget.src = erro)}
-                    ></img>
-
-                    <CardDescription>{filme.title}</CardDescription>
-                  </CardContent>
-                </Card>
+        <React.Suspense
+          fallback={
+            <div>
+              {Array.from({ length: quant }).map((_, idx) => (
+                <SkeletonCard key={idx} />
               ))}
             </div>
-          </div>
-        ) : (
-          <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
-            Faça uma busca
-          </h1>
-        )}
-        {page < 1 ? (
-          <></>
-        ) : (
-          <Pagination>
-            <PaginationContent className="gap-2 md:gap-3 xl:gap-5">
-              {page > 1 && (
-                <>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      className="w-full"
-                      href={`?q=${query}&page=${Math.max(1, page - 1)}`}
-                      aria-disabled={page === 1}
-                    ></PaginationPrevious>
-                  </PaginationItem>
-                  <PaginationItem className="bg-chart-2 rounded-md xl:p-0.5 xl:justify-center hidden md:flex">
-                    <PaginationLink href={`?q=${query}&page=${page - 1}`}>
-                      {page - 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                </>
-              )}
-              <PaginationItem className="bg-destructive rounded-md xl:p-0.5 xl:justify-center">
-                <PaginationLink href={`?q=${query}&page=${page}`}>
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
+          }
+        >
+          <Await resolve={nonCriticalData}>
+            {(pesquisa) => (
+              <>
+                {query ? (
+                  <div>
+                    <div className="flex flex-wrap gap-3 lg:gap-5 justify-center lg:w-[1100px]">
+                      {pesquisa.results.map((filme: detalhesProps) => (
+                        <Card
+                          className="w-[150px] lg:w-[200px] xl:w-[250px] h-full"
+                          key={filme.id}
+                        >
+                          <CardContent className="flex aspect-square flex-col justify-center p-2 gap-2">
+                            <img
+                              className="object-cover rounded-md h-[150px]"
+                              onClick={() => navigate(`/detalhes/${filme.id}`)}
+                              src={IMAGE_BASE_URL + filme.poster_path}
+                              onError={(e) => (e.currentTarget.src = erro)}
+                            ></img>
 
-              {page < pesquisa.total_pages && (
-                <>
-                  <PaginationItem className="bg-chart-2 rounded-md hidden md:flex xl:p-0.5 xl:justify-center">
-                    <PaginationLink href={`?q=${query}&page=${page + 1}`}>
-                      {page + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext
-                      className="w-full"
-                      href={`?q=${query}&page=${Math.min(
-                        pesquisa.total_pages,
-                        page + 1
-                      )}`}
-                      aria-disabled={page === pesquisa.total_pages}
-                    ></PaginationNext>
-                  </PaginationItem>
-                </>
-              )}
-            </PaginationContent>
-          </Pagination>
-        )}
+                            <CardDescription>{filme.title}</CardDescription>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
+                    Faça uma busca
+                  </h1>
+                )}
+                {query == "" || page < 1 ? (
+                  <></>
+                ) : (
+                  <Pagination>
+                    <PaginationContent className="gap-2 md:gap-3 xl:gap-5">
+                      {page > 1 && (
+                        <>
+                          <PaginationItem>
+                            <PaginationPrevious
+                              className="w-full"
+                              href={`?q=${query}&page=${Math.max(1, page - 1)}`}
+                              aria-disabled={page === 1}
+                            ></PaginationPrevious>
+                          </PaginationItem>
+                          <PaginationItem className="bg-chart-2 rounded-md xl:p-0.5 xl:justify-center hidden md:flex">
+                            <PaginationLink
+                              href={`?q=${query}&page=${page - 1}`}
+                            >
+                              {page - 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        </>
+                      )}
+                      <PaginationItem className="bg-destructive rounded-md xl:p-0.5 xl:justify-center">
+                        <PaginationLink href={`?q=${query}&page=${page}`}>
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+
+                      {page < pesquisa.total_pages && (
+                        <>
+                          <PaginationItem className="bg-chart-2 rounded-md hidden md:flex xl:p-0.5 xl:justify-center">
+                            <PaginationLink
+                              href={`?q=${query}&page=${page + 1}`}
+                            >
+                              {page + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                          <PaginationItem>
+                            <PaginationNext
+                              className="w-full"
+                              href={`?q=${query}&page=${Math.min(
+                                pesquisa.total_pages,
+                                page + 1
+                              )}`}
+                              aria-disabled={page === pesquisa.total_pages}
+                            ></PaginationNext>
+                          </PaginationItem>
+                        </>
+                      )}
+                    </PaginationContent>
+                  </Pagination>
+                )}
+              </>
+            )}
+          </Await>
+        </React.Suspense>
       </div>
     </div>
   );

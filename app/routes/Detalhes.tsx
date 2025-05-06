@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { Await, useLoaderData } from "react-router";
 import { useLocalStorage } from "usehooks-ts";
 import Menu from "~/components/Menu";
 import type { detalhesProps } from "~/interfaces/detalhesProps";
@@ -20,7 +20,8 @@ import type { FavoritoProps } from "~/interfaces/favoritoProps";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 import erro from "../images/LogoCinza.png";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { SkeletonCard } from "~/components/SkeletonCard";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
@@ -33,14 +34,17 @@ export async function loader({ params }: { params: { id: string } }) {
   );
   const filme = await filmeResponse.json();
   const similares = await similaresResponse.json();
+  let nonCriticalData = new Promise((res) =>
+    setTimeout(() => res(similares.results), 1500)
+  );
 
-  return { filme, similares: similares.results };
+  return { filme, nonCriticalData };
 }
 
 export default function PaginaDetalhes() {
-  const { filme, similares } = useLoaderData() as {
+  const { filme, nonCriticalData } = useLoaderData() as {
     filme: detalhesProps;
-    similares: FilmeProps[];
+    nonCriticalData: FilmeProps[];
   };
   const avaliacao = parseFloat(filme.vote_average) / 2;
   const [isClient, setIsClient] = useState(false);
@@ -68,7 +72,7 @@ export default function PaginaDetalhes() {
     <div>
       <Menu />
       <div className="flex flex-col items-center gap-2 ">
-        <div className="flex items-center justify-center p-4 relative w-[100%]  mask-radial-[80%_80%] mask-b-from-85% mask-radial-from-70%">
+        <div className="flex items-center justify-center p-4 relative w-[100%] lg:w-[95%]  mask-radial-[80%_80%] mask-b-from-85% mask-radial-from-70%">
           <div className="absolute inset-0 flex justify-center items-center flex-col  gap-2 xl:gap-5 mt-20  md:mt-60 lg:mt-80 xl:mt-110 ">
             <div className="hidden md:flex flex-col text-center w-[90%] xl:gap-2 ">
               <h1 className="text-primary text-xl font-bold lg:text-3xl xl:text-4xl">
@@ -113,8 +117,8 @@ export default function PaginaDetalhes() {
         </div>
 
         <div
-          className="flex flex-col gap-5 md:flex-row w-[300px]  md:w-[740px] lg:w-[1000px]  
-        xl:w-[1400px] 2xl:w-[1500px]  items-center md:items-baseline "
+          className="flex flex-col gap-5 md:flex-row w-[300px]  md:w-[740px] lg:w-[900px] xl:w-[1000px]
+         items-center md:items-baseline "
         >
           <div className="flex-col gap-3 flex">
             <div className="bg-foreground flex flex-col  gap-1  min-h-[170px] md:min-h-[150px] rounded-md p-2">
@@ -176,7 +180,17 @@ export default function PaginaDetalhes() {
           <h1 className="text-chart-5 text-center font-bold text-xl lg:text-2xl 2xl:text-4xl">
             Relacionados
           </h1>
-          <CarouselDemo filmes={similares} />
+          <React.Suspense
+            fallback={
+              <div>
+                <SkeletonCard />
+              </div>
+            }
+          >
+            <Await resolve={nonCriticalData}>
+              {(filmes) => <CarouselDemo filmes={filmes ?? []} />}
+            </Await>
+          </React.Suspense>
         </div>
       </div>
     </div>
