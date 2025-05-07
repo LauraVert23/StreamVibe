@@ -1,16 +1,20 @@
 # Welcome to StreamVibe!
 
-O melhor stream de filmes populares para te envolver no melhor da indústria cinematográfica!
+The best streaming platform for popular movies, immersing you in the finest of the film industry!
 
 ## Features
 
 - 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- 🔄 Data loading
+- 🔒 TypeScript
+- 🎉 TailwindCSS and Shadcn UI
+- 🧭 React Router v7
+
+## Differentials
+
+- Favorites system (saved in localStorage)
+- Skeleton loading on cards
+- Pagination
 
 ## Getting Started
 
@@ -24,17 +28,18 @@ pnpm install
 
 ### Development
 
-Start the development server with HMR:
+Start the development server with:
 
 ```bash
 pnpm run dev
 ```
 
-Sua imersão será completa quando acessar: `http://localhost:5173`.
+Your immersion will be complete when you access: `http://localhost:5173`.
 
 ## Styling
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+For styling, the following template was used as a reference:
+[OTT Dark Theme Website UI Design Template for Media Streaming](https://www.figma.com/design/vxJedHI80jX1bCHPRLSOwd/OTT-Dark-Theme-Website-UI-Design-Template-for-Media-Streaming--Movies-and-TV---FREE-Editable----Community-?node-id=34-3&p=f&t=Z0A7MABY9hfBaYSo-0)
 
 ---
 

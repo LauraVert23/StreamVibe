@@ -7,6 +7,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "../components/ui/carousel";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 import erro from "../images/LogoCinza.png";
@@ -19,12 +21,7 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
 
   return (
     <Carousel
-      plugins={[
-        Autoplay({
-          delay: 5000,
-        }),
-      ]}
-      className=" w-[300px] h-[200px] gap-2 md:w-[700px] lg:h-[300px] lg:w-[900px]  xl:w-[1000px] 2xl:h-[400px] "
+      className="w-[300px] h-[200px] gap-2 md:w-[700px] lg:h-[300px] lg:w-[900px]  xl:w-[1000px] 2xl:h-[400px] "
       opts={{
         slidesToScroll: isLg ? 5 : isMd ? 4 : 2,
         align: "start",
@@ -59,6 +56,12 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
           </CarouselItem>
         ))}
       </CarouselContent>
+      <div className="hidden lg:flex">
+        <CarouselPrevious />
+      </div>
+      <div className="hidden lg:flex">
+        <CarouselNext />
+      </div>
     </Carousel>
   );
 }

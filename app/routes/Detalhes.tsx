@@ -97,7 +97,7 @@ export default function PaginaDetalhes() {
               </p>
             </div>
             <div className="flex md:flex-row gap-2 xl:gap-4 flex-col items-center">
-              <Button className="bg-chart-5 w-[150px] lg:w-[200px] lg:text-xl">
+              <Button className="bg-chart-5 hover:scale-105  w-[150px] lg:w-[200px] lg:text-xl">
                 <Play fill="#fafafa" />
                 Assistir
               </Button>
@@ -164,7 +164,7 @@ export default function PaginaDetalhes() {
                           <CardContent className="p-2 xl:text-xl">
                             <span>{comentario.author}</span>
                           </CardContent>
-                          <CardDescription className="p-1 -mt-5 xl:text-lg">
+                          <CardDescription className="p-1 break-words -mt-5 xl:text-lg">
                             {comentario.content.slice(0, 130)}
                             {comentario.content.length > 100 ? "..." : ""}
                           </CardDescription>
