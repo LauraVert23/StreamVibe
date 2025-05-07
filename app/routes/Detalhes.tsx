@@ -1,5 +1,5 @@
 import { Await, useLoaderData } from "react-router";
-import { useLocalStorage } from "usehooks-ts";
+import { useLocalStorage, useMediaQuery } from "usehooks-ts";
 import Menu from "~/components/Menu";
 import type { detalhesProps } from "~/interfaces/detalhesProps";
 import type { Route } from "./+types/home";
@@ -11,6 +11,7 @@ import {
   Plus,
   ThumbsUp,
   Volume2,
+  Car,
 } from "lucide-react";
 import Estrelas from "~/components/Estrelas";
 import type { FilmeProps } from "~/interfaces/filmeProps";
@@ -22,6 +23,13 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 import erro from "../images/LogoCinza.png";
 import React, { useEffect, useState } from "react";
 import { SkeletonCard } from "~/components/SkeletonCard";
+import type { reviewsProps } from "~/interfaces/reviewsProps";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "~/components/ui/carousel";
+import { Card, CardContent, CardDescription } from "~/components/ui/card";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
@@ -29,25 +37,31 @@ export async function loader({ params }: { params: { id: string } }) {
   const filmeResponse = await fetch(
     `https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.REACT_APP_API_KEY}`
   );
+  const reviewsResponse = await fetch(
+    `https://api.themoviedb.org/3/movie/${params.id}/reviews?api_key=${process.env.REACT_APP_API_KEY}`
+  );
   const similaresResponse = await fetch(
     `https://api.themoviedb.org/3/movie/${params.id}/similar?api_key=${process.env.REACT_APP_API_KEY}`
   );
   const filme = await filmeResponse.json();
+  const reviewsData = await reviewsResponse.json();
   const similares = await similaresResponse.json();
   let nonCriticalData = new Promise((res) =>
     setTimeout(() => res(similares.results), 1500)
   );
 
-  return { filme, nonCriticalData };
+  return { filme, nonCriticalData, reviews: reviewsData.results };
 }
 
 export default function PaginaDetalhes() {
-  const { filme, nonCriticalData } = useLoaderData() as {
+  const { filme, nonCriticalData, reviews } = useLoaderData() as {
     filme: detalhesProps;
     nonCriticalData: FilmeProps[];
+    reviews: reviewsProps[];
   };
   const avaliacao = parseFloat(filme.vote_average) / 2;
   const [isClient, setIsClient] = useState(false);
+  const isMd = useMediaQuery("(min-width: 768px)");
   const [favoritosFilmes, setFavoritosFilmes] = useLocalStorage<
     FavoritoProps[]
   >("favoritos", []);
@@ -91,7 +105,7 @@ export default function PaginaDetalhes() {
                 <div className="w-fit bg-background border-2 border-ring rounded-md p-1">
                   <Plus color="white" />
                 </div>
-                <div className="w-fit bg-background border-2 border-ring rounded-md p-1">
+                <div className="w-fit hover:scale-110 bg-background border-2 border-ring rounded-md p-1">
                   <ThumbsUp
                     color="white"
                     fill={filmeFavorito?.favorito ? "red" : undefined}
@@ -117,11 +131,11 @@ export default function PaginaDetalhes() {
         </div>
 
         <div
-          className="flex flex-col gap-5 md:flex-row w-[300px]  md:w-[740px] lg:w-[900px] xl:w-[1000px]
-         items-center md:items-baseline "
+          className="flex flex-col gap-5 md:flex-row w-[300px] md:w-[740px] lg:w-[900px] xl:w-[1000px]
+         items-center md:items-start "
         >
-          <div className="flex-col gap-3 flex">
-            <div className="bg-foreground flex flex-col  gap-1  min-h-[170px] md:min-h-[150px] rounded-md p-2">
+          <div className="flex-col gap-3 flex ">
+            <div className="bg-foreground flex flex-col gap-1 min-h-[170px] md:min-h-[150px] rounded-md p-2">
               <h5 className="text-muted-foreground xl:text-xl">Descrição</h5>
               <div>
                 <p className="text-primary-foreground xl:text-xl">
@@ -129,20 +143,40 @@ export default function PaginaDetalhes() {
                 </p>
               </div>
             </div>
-            <div className="hidden md:flex bg-foreground  flex-col  gap-2 rounded-md p-2">
-              <h5 className="text-muted-foreground xl:text-xl">Empresas</h5>
+            <div className="flex bg-foreground flex-col w-[300px] md:w-[420px] lg:w-[600px] xl:w-[700px] gap-2 rounded-md p-2">
+              <h5 className="text-muted-foreground xl:text-xl">Reviews</h5>
               <div>
-                <p className="text-primary-foreground xl:text-xl flex flex-col gap-1.5">
-                  {filme.production_companies.map(
-                    (empresa: { id: number; name: string }) => (
-                      <span key={empresa.id}>{empresa.name}</span>
-                    )
-                  )}
-                </p>
+                <Carousel
+                  className="h-auto w-full gap-2"
+                  opts={{
+                    slidesToScroll: isMd ? 2 : 1,
+                    align: "start",
+                    loop: true,
+                  }}
+                >
+                  <CarouselContent>
+                    {reviews.map((comentario: reviewsProps) => (
+                      <CarouselItem
+                        className="basis-full md:basis-1/2"
+                        key={comentario.id}
+                      >
+                        <Card>
+                          <CardContent className="p-2 xl:text-xl">
+                            <span>{comentario.author}</span>
+                          </CardContent>
+                          <CardDescription className="p-1 -mt-5 xl:text-lg">
+                            {comentario.content.slice(0, 130)}
+                            {comentario.content.length > 100 ? "..." : ""}
+                          </CardDescription>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
               </div>
             </div>
           </div>
-          <div className="bg-foreground flex flex-col justify-center min-w-[300px] rounded-md p-2 gap-3 lg:text-xl">
+          <div className="bg-foreground flex flex-col justify-center min-w-[300px] min-h-[170px] md:min-h-[150px] rounded-md p-2 gap-3 lg:text-xl">
             <div className="flex flex-row gap-3">
               <Calendar color="#464444" />
               <h3 className="text-muted-foreground">Data de Lançamento</h3>

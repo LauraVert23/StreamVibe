@@ -19,7 +19,8 @@ import {
   PaginationPrevious,
 } from "~/components/ui/pagination";
 import React from "react";
-import { SkeletonCard } from "~/components/SkeletonCard";
+import { Skeleton } from "~/components/ui/skeleton";
+import { useMediaQuery } from "usehooks-ts";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
@@ -33,7 +34,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     `https://api.themoviedb.org/3/search/movie?query=${searchParams}&page=${page}&api_key=${process.env.REACT_APP_API_KEY}`
   );
   const data = await pesquisa.json();
-  let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 1000));
+  let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 2000));
   return { nonCriticalData };
 }
 
@@ -43,7 +44,9 @@ export default function Busca() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const page = Number(searchParams.get("page"));
-  const quant = 4;
+  const isMd = useMediaQuery("(min-width: 768px)");
+  const quant = isMd ? 4 : 2;
+  console.log(isMd, quant);
 
   return (
     <div>
@@ -53,7 +56,7 @@ export default function Busca() {
 
       <div className=" flex flex-col justify-center mt-10 gap-3 items-center mb-3 xl:gap-8">
         <input
-          className="w-full max-w-[98%] h-10 bg-foreground rounded-md p-2 text-primary xl:h-15 lg:text-lg"
+          className="w-[98%] md:w-[95%] h-10 bg-foreground rounded-md p-2 text-primary xl:h-15 lg:text-lg"
           type="text"
           placeholder="Digite o nome do filme"
           value={query ?? ""}
@@ -63,22 +66,36 @@ export default function Busca() {
         />
         <React.Suspense
           fallback={
-            <div>
-              {Array.from({ length: quant }).map((_, idx) => (
-                <SkeletonCard key={idx} />
-              ))}
-            </div>
+            query ? (
+              <div className="flex flex-col gap-1 ">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div className="flex flex-row gap-1" key={i}>
+                    {Array.from({ length: quant }).map((_, idx) => (
+                      <Skeleton
+                        className="w-[140px] p-1 rounded:md h-[200px]"
+                        key={idx}
+                      >
+                        <Card>
+                          <CardContent className="h-[130px] object-cover rounded-md"></CardContent>
+                          <CardDescription></CardDescription>
+                        </Card>
+                      </Skeleton>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : null
           }
         >
-          <Await resolve={nonCriticalData}>
+          <Await resolve={nonCriticalData} key={query + "-" + page}>
             {(pesquisa) => (
               <>
                 {query ? (
                   <div>
-                    <div className="flex flex-wrap gap-3 lg:gap-5 justify-center lg:w-[1100px]">
+                    <div className="flex flex-wrap gap-3 lg:gap-5 justify-center lg:w-[800px] xl:w-[1000px]">
                       {pesquisa.results.map((filme: detalhesProps) => (
                         <Card
-                          className="w-[150px] lg:w-[200px] xl:w-[250px] h-full"
+                          className="w-[150px] xl:w-[200px]  h-full"
                           key={filme.id}
                         >
                           <CardContent className="flex aspect-square flex-col justify-center p-2 gap-2">

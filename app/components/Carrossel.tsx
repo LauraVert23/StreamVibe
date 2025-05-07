@@ -2,7 +2,7 @@ import type { FilmeProps } from "~/interfaces/filmeProps";
 import { Card, CardContent, CardDescription } from "../components/ui/card";
 import { useNavigate } from "react-router";
 import { ArrowRight } from "lucide-react";
-
+import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
@@ -19,7 +19,12 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
 
   return (
     <Carousel
-      className="w-[300px] h-[200px] gap-2 md:w-[700px] lg:h-[300px] lg:w-[900px]  xl:w-[1000px] 2xl:h-[400px] "
+      plugins={[
+        Autoplay({
+          delay: 5000,
+        }),
+      ]}
+      className=" w-[300px] h-[200px] gap-2 md:w-[700px] lg:h-[300px] lg:w-[900px]  xl:w-[1000px] 2xl:h-[400px] "
       opts={{
         slidesToScroll: isLg ? 5 : isMd ? 4 : 2,
         align: "start",
@@ -33,10 +38,10 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
             key={filme.id}
           >
             <div className="p-1">
-              <Card className=" flex flex-col gap-10">
+              <Card className=" flex flex-col gap-10 hover:scale-105">
                 <CardContent className="flex aspect-square flex-col justify-center p-2 ">
                   <img
-                    className="w-full h-full object-cover rounded-md mask-b-from-30% mask-radial-[100%_100%] mask-radial-from-20% cursor-pointer"
+                    className="w-full hover:scale-110 h-full object-cover rounded-md mask-b-from-30% mask-radial-[100%_100%] mask-radial-from-20% cursor-pointer"
                     src={IMAGE_BASE_URL + filme.backdrop_path}
                     onClick={() => navigate(`/detalhes/${filme.id}`)}
                     onError={(e) => (e.currentTarget.src = erro)}
