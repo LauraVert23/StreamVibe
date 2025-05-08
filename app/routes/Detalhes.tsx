@@ -222,7 +222,11 @@ export default function PaginaDetalhes() {
             }
           >
             <Await resolve={nonCriticalData}>
-              {(filmes) => <CarouselDemo filmes={filmes ?? []} />}
+              {(filmes) => (
+                <div className="items-center flex flex-col mb-12 md:mb-20 lg:mb-5">
+                  <CarouselDemo filmes={filmes ?? []} />
+                </div>
+              )}
             </Await>
           </React.Suspense>
         </div>

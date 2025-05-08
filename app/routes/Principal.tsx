@@ -77,7 +77,7 @@ export default function PaginaPrincipal() {
           >
             <Await resolve={nonCriticalData}>
               {(filmes) => (
-                <div className="items-center flex flex-col">
+                <div className="items-center flex flex-col mb-5 md:mb-10 lg:mb-5">
                   <CarouselDemo filmes={filmes ?? []} />
                 </div>
               )}
