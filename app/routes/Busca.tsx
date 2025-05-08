@@ -21,7 +21,6 @@ import {
 import React from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useMediaQuery } from "usehooks-ts";
-
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
@@ -46,7 +45,6 @@ export default function Busca() {
   const page = Number(searchParams.get("page"));
   const isMd = useMediaQuery("(min-width: 768px)");
   const quant = isMd ? 4 : 2;
-  console.log(isMd, quant);
 
   return (
     <div>

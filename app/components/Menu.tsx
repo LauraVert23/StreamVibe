@@ -34,7 +34,7 @@ export default function Menu() {
         <div className="md:hidden w-[40px] h-[35px]  border-3 rounded-md border-border flex justify-center bg-card ">
           <AlignRight color="#a29a9a" className="mt-0.75" />
         </div>
-        <div className="hidden md:flex justify-center mt-1 xl:mt-6 bg-card w-[35px] lg:w-[40px] xl:w-[45px] lg:h-[45px] lg:border-3 border-border items-center border-2 rounded-md">
+        <div className="hidden hover:scale-110 cursor-pointer md:flex justify-center mt-1 xl:mt-6 bg-card w-[35px] lg:w-[40px] xl:w-[45px] lg:h-[45px] lg:border-3 border-border items-center border-2 rounded-md">
           <Search
             onClick={(e) => {
               navigate("/busca");

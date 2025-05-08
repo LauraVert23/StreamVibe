@@ -35,12 +35,14 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
             key={filme.id}
           >
             <div className="p-1">
-              <Card className=" flex flex-col gap-10 hover:scale-105">
+              <Card
+                className=" flex flex-col gap-10 hover:scale-105 cursor-pointer"
+                onClick={() => navigate(`/detalhes/${filme.id}`)}
+              >
                 <CardContent className="flex aspect-square flex-col justify-center p-2 ">
                   <img
                     className="w-full hover:scale-110 h-full object-cover rounded-md mask-b-from-30% mask-radial-[100%_100%] mask-radial-from-20% cursor-pointer"
                     src={IMAGE_BASE_URL + filme.backdrop_path}
-                    onClick={() => navigate(`/detalhes/${filme.id}`)}
                     onError={(e) => (e.currentTarget.src = erro)}
                   ></img>
 
