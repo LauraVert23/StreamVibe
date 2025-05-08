@@ -28,6 +28,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "~/components/ui/carousel";
 import { Card, CardContent, CardDescription } from "~/components/ui/card";
 export function meta({}: Route.MetaArgs) {
@@ -131,7 +133,7 @@ export default function PaginaDetalhes() {
         </div>
 
         <div
-          className="flex flex-col gap-5 md:flex-row w-[300px] md:w-[740px] lg:w-[900px] xl:w-[1000px]
+          className="flex flex-col-reverse gap-5 md:flex-row w-[300px] md:w-[740px] lg:w-[900px] xl:w-[1000px]
          items-center md:items-start "
         >
           <div className="flex-col gap-3 flex ">
@@ -161,8 +163,13 @@ export default function PaginaDetalhes() {
                         key={comentario.id}
                       >
                         <Card>
-                          <CardContent className="p-2 xl:text-xl">
+                          <CardContent className="p-2 xl:text-xl gap-1">
                             <span>{comentario.author}</span>
+                            {
+                              <Estrelas
+                                nota={comentario.author_details.rating}
+                              />
+                            }
                           </CardContent>
                           <CardDescription className="p-1 break-words -mt-5 xl:text-lg">
                             {comentario.content.slice(0, 130)}
@@ -172,6 +179,10 @@ export default function PaginaDetalhes() {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
+                  <div className="flex justify-center mt-2 gap-10 md:mt-4 lg:mt-3 lg:justify-between lg:gap-0 w-full relative">
+                    <CarouselPrevious className=" static translate-y-0 left-0 " />
+                    <CarouselNext className="static translate-y-0 right-0" />
+                  </div>
                 </Carousel>
               </div>
             </div>

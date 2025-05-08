@@ -1,6 +1,12 @@
 import { Card, CardContent, CardDescription } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/carousel";
 
 export function SkeletonCard() {
   const cards = 5;
@@ -17,7 +23,11 @@ export function SkeletonCard() {
             </Skeleton>
           </CarouselItem>
         ))}
-      </CarouselContent>
+      </CarouselContent>{" "}
+      <div className="flex justify-center gap-10 md:mt-8 lg:mt-3 lg:justify-between lg:gap-0 w-full relative">
+        <CarouselPrevious className="static translate-y-0 left-0 !text-background" />
+        <CarouselNext className="static translate-y-0 right-0 !text-background" />
+      </div>
     </Carousel>
   );
 }
