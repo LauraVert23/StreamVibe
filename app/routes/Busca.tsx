@@ -43,8 +43,6 @@ export default function Busca() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q");
   const page = Number(searchParams.get("page"));
-  const isMd = useMediaQuery("(min-width: 768px)");
-  const quant = isMd ? 4 : 2;
 
   return (
     <div>
@@ -59,16 +57,24 @@ export default function Busca() {
           placeholder="Digite o nome do filme"
           value={query ?? ""}
           onChange={(e) => {
-            setSearchParams({ q: e.target.value, page: "1" });
+            const searchQuery = e.target.value;
+            if (searchQuery) {
+              window.location.href = `?q=${searchQuery}&page=1`;
+            }
           }}
         />
+        {!query && (
+          <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
+            Faça uma busca
+          </h1>
+        )}
         <React.Suspense
           fallback={
             query ? (
               <div className="flex flex-col gap-1 ">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div className="flex flex-row gap-1" key={i}>
-                    {Array.from({ length: quant }).map((_, idx) => (
+                    {Array.from({ length: 4 }).map((_, idx) => (
                       <Skeleton
                         className="w-[140px] p-1 rounded:md h-[200px]"
                         key={idx}
@@ -88,7 +94,7 @@ export default function Busca() {
           <Await resolve={nonCriticalData} key={query + "-" + page}>
             {(pesquisa) => (
               <>
-                {query ? (
+                {query && (
                   <div>
                     <div className="flex flex-wrap gap-3 lg:gap-5 justify-center lg:w-[800px] xl:w-[1000px]">
                       {pesquisa.results.map((filme: detalhesProps) => (
@@ -110,10 +116,6 @@ export default function Busca() {
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
-                    Faça uma busca
-                  </h1>
                 )}
                 {query == "" || page < 1 ? (
                   <></>
