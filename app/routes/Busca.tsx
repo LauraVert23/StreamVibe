@@ -40,7 +40,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Busca() {
   const { nonCriticalData } = useLoaderData();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
   const page = Number(searchParams.get("page"));
 
@@ -57,11 +57,8 @@ export default function Busca() {
           placeholder="Digite o nome do filme"
           value={query ?? ""}
           onChange={(e) => {
-            setSearchParams({ q: e.target.value, page: "1" });
             const searchQuery = e.target.value;
-            if (searchQuery) {
-              window.location.href = `?q=${searchQuery}&page=1`;
-            }
+            window.location.href = `?q=${searchQuery}&page=1`;
           }}
         />
         {!query && (
