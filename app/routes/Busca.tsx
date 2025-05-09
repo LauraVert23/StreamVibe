@@ -33,7 +33,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     `https://api.themoviedb.org/3/search/movie?query=${searchParams}&page=${page}&api_key=${process.env.REACT_APP_API_KEY}`
   );
   const data = await pesquisa.json();
-  let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 2000));
+  let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 1000));
   return { nonCriticalData };
 }
 
@@ -57,6 +57,7 @@ export default function Busca() {
           placeholder="Digite o nome do filme"
           value={query ?? ""}
           onChange={(e) => {
+            setSearchParams({ q: e.target.value, page: "1" });
             const searchQuery = e.target.value;
             if (searchQuery) {
               window.location.href = `?q=${searchQuery}&page=1`;
@@ -71,12 +72,12 @@ export default function Busca() {
         <React.Suspense
           fallback={
             query ? (
-              <div className="flex flex-col gap-1 ">
+              <div className="flex flex-col gap-1 lg:gap-5 ">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div className="flex flex-row gap-1" key={i}>
+                  <div className="flex flex-row gap-3 lg:gap4" key={i}>
                     {Array.from({ length: 4 }).map((_, idx) => (
                       <Skeleton
-                        className="w-[140px] p-1 rounded:md h-[200px]"
+                        className="w-[150px] xl:w-[200px] p-1 rounded:md h-[200px]"
                         key={idx}
                       >
                         <Card>
