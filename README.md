@@ -35,9 +35,9 @@ pnpm run dev
 ```
 
 Your immersion will be complete when you access: `http://localhost:5173`.
-
+\
 E-mail: admin@exemplo.com
-
+\
 Password: senha123
 
 ## Styling
