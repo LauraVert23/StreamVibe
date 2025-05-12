@@ -20,12 +20,15 @@ import {
 } from "~/components/ui/pagination";
 import React from "react";
 import { Skeleton } from "~/components/ui/skeleton";
-import { useMediaQuery } from "usehooks-ts";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
+  const viewportWidth = request.headers.get("Viewport-Width");
+  const width = viewportWidth ? parseInt(viewportWidth, 10) : 0;
+  const isMobile = width < 768;
+  const quantSkeleton = isMobile ? 2 : 4;
   const url = new URL(request.url);
   const searchParams = url.searchParams.get("q");
   const page = url.searchParams.get("page") || "1";
@@ -34,11 +37,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   );
   const data = await pesquisa.json();
   let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 1000));
-  return { nonCriticalData };
+  return { nonCriticalData, quantSkeleton };
 }
 
 export default function Busca() {
-  const { nonCriticalData } = useLoaderData();
+  const { nonCriticalData, quantSkeleton } = useLoaderData();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
@@ -72,7 +75,7 @@ export default function Busca() {
               <div className="flex flex-col gap-1 lg:gap-5 ">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div className="flex flex-row gap-3 lg:gap4" key={i}>
-                    {Array.from({ length: 4 }).map((_, idx) => (
+                    {Array.from({ length: quantSkeleton }).map((_, idx) => (
                       <Skeleton
                         className="w-[150px] xl:w-[200px] p-1 rounded:md h-[200px]"
                         key={idx}
