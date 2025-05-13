@@ -245,3 +245,7 @@ export default function PaginaDetalhes() {
     </div>
   );
 }
+
+export function ErrorBoundary() {
+  return <h1>Erro</h1>;
+}

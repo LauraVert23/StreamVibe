@@ -85,3 +85,7 @@ export default function Login() {
     </div>
   );
 }
+
+export function ErrorBoundary() {
+  return <h1>Erro</h1>;
+}

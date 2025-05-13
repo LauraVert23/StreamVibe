@@ -179,3 +179,7 @@ export default function Busca() {
     </div>
   );
 }
+
+export function ErrorBoundary() {
+  return <h1>Erro</h1>;
+}
