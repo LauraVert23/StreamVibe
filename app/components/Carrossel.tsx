@@ -58,8 +58,8 @@ export function CarouselDemo({ filmes }: { filmes: FilmeProps[] }) {
         ))}
       </CarouselContent>
       <div className="flex justify-center gap-10 md:mt-8 lg:mt-3 lg:justify-between lg:gap-0 w-full relative">
-        <CarouselPrevious className="static translate-y-0 left-0" />
-        <CarouselNext className="static translate-y-0 right-0" />
+        <CarouselPrevious className="static translate-y-0 left-0 " />
+        <CarouselNext className="static translate-y-0 right-0 " />
       </div>
     </Carousel>
   );
