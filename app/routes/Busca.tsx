@@ -62,7 +62,7 @@ export default function Busca() {
         />
         {!query && (
           <h1 className="text-chart-5 lg:text-xl xl:text-2xl">
-            Faça uma busca
+            Faça uma busca por um filme
           </h1>
         )}
         <React.Suspense
