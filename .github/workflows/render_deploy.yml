@@ -15,4 +15,3 @@ jobs:
         with:
           service-id: ${{ secrets.RENDER_SERVICE_ID }}
           api-key: ${{ secrets.RENDER_API_KEY }}
-          deploy-hook-url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
