@@ -25,10 +25,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const viewportWidth = request.headers.get("Viewport-Width");
-  const width = viewportWidth ? parseInt(viewportWidth, 10) : 0;
-  const isMobile = width < 768;
-  const quantSkeleton = isMobile ? 2 : 4;
   const url = new URL(request.url);
   const searchParams = url.searchParams.get("q");
   const page = url.searchParams.get("page") || "1";
@@ -37,11 +33,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   );
   const data = await pesquisa.json();
   let nonCriticalData = new Promise((res) => setTimeout(() => res(data), 1000));
-  return { nonCriticalData, quantSkeleton };
+  return { nonCriticalData };
 }
 
 export default function Busca() {
-  const { nonCriticalData, quantSkeleton } = useLoaderData();
+  const { nonCriticalData } = useLoaderData();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
@@ -72,21 +68,17 @@ export default function Busca() {
         <React.Suspense
           fallback={
             query ? (
-              <div className="flex flex-col gap-1 lg:gap-5 ">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div className="flex flex-row gap-3 lg:gap4" key={i}>
-                    {Array.from({ length: quantSkeleton }).map((_, idx) => (
-                      <Skeleton
-                        className="w-[150px] xl:w-[200px] p-1 rounded:md h-[200px]"
-                        key={idx}
-                      >
-                        <Card>
-                          <CardContent className="h-[130px] object-cover rounded-md"></CardContent>
-                          <CardDescription></CardDescription>
-                        </Card>
-                      </Skeleton>
-                    ))}
-                  </div>
+              <div className="flex flex-wrap gap-3 lg:gap-5 justify-center lg:w-[800px] xl:w-[1000px]">
+                {Array.from({ length: 20 }).map((_, i) => (
+                  <Skeleton
+                    className="w-[150px] xl:w-[200px] p-1 rounded:md h-[200px]"
+                    key={i}
+                  >
+                    <Card>
+                      <CardContent className="h-[130px] object-cover rounded-md"></CardContent>
+                      <CardDescription></CardDescription>
+                    </Card>
+                  </Skeleton>
                 ))}
               </div>
             ) : null
