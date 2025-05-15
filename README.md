@@ -40,6 +40,8 @@ E-mail: admin@exemplo.com
 \
 Password: senha123
 
+Now the website is also available at: [https://streamvibe-a6sf.onrender.com](https://streamvibe-a6sf.onrender.com)
+
 ## Styling
 
 For styling, the following template was used as a reference:

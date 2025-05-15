@@ -8,14 +8,5 @@ export default defineConfig({
     tailwindcss(),
     reactRouter(),
     tsconfigPaths(),
-    {
-      name: "custom-middleware",
-      configureServer(server) {
-        server.middlewares.use((req, res, next) => {
-          res.setHeader("Accept-CH", "Viewport-Width");
-          next();
-        });
-      },
-    },
   ],
 });

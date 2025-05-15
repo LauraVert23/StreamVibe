@@ -3,11 +3,9 @@ name: StreamVibe
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
-  deploy:
+  deploy-to-render:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to production
