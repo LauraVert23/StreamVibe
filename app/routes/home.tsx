@@ -22,10 +22,10 @@ export default function Login() {
   const navigate = useNavigate();
 
   const login = () => {
-    // const email = localStorage.getItem("email");
-    // const senha = localStorage.getItem("senha");
-    const email = import.meta.env.VITE_ADMIN_EMAIL;
-    const senha = import.meta.env.VITE_ADMIN_PASSWORD;
+    const email = localStorage.getItem("email");
+    const senha = localStorage.getItem("senha");
+    // const email = import.meta.env.VITE_ADMIN_EMAIL;
+    // const senha = import.meta.env.VITE_ADMIN_PASSWORD;
     if (email === usuario.trim() && senha === password.trim()) {
       navigate("/principal");
     } else {
