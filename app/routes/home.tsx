@@ -79,6 +79,7 @@ export default function Login() {
         />
         <Button
           onClick={() => login()}
+          type="submit"
           className="bg-muted-foreground text-background lg:text-lg xl:text-xl "
         >
           Entrar
