@@ -15,12 +15,9 @@ export async function action({ request }: Route.ActionArgs) {
   const senha = import.meta.env.VITE_ADMIN_PASSWORD;
   let formData = await request.formData();
   let usuario_email = formData.get("email");
-  console.log(usuario_email);
   let usuario_senha = formData.get("senha");
-  console.log(usuario_senha);
 
   if (email === usuario_email && senha === usuario_senha) {
-    console.log("logado");
     return redirect("/principal");
   } else {
     return { error: "Email ou senha incorretos" };
