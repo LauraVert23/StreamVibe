@@ -1,39 +1,44 @@
 import type { Route } from "./+types/home";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { redirect, useActionData, useFetcher } from "react-router";
 import Logo from "../images/Logo.png";
+import { Form } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
 
-export async function action() {
-  const email = "admin@exemplo.com";
-  const senha = "senha123";
-  localStorage.setItem("email", email);
-  localStorage.setItem("senha", senha);
+export async function action({ request }: Route.ActionArgs) {
+  const email = import.meta.env.VITE_ADMIN_EMAIL;
+  const senha = import.meta.env.VITE_ADMIN_PASSWORD;
+  let formData = await request.formData();
+  let usuario_email = formData.get("email");
+  console.log(usuario_email);
+  let usuario_senha = formData.get("senha");
+  console.log(usuario_senha);
+
+  if (email === usuario_email && senha === usuario_senha) {
+    console.log("logado");
+    return redirect("/principal");
+  } else {
+    return { error: "Email ou senha incorretos" };
+  }
 }
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const actionData = useActionData();
 
-  const login = () => {
-    // const email = localStorage.getItem("email");
-    // const senha = localStorage.getItem("senha");
-    const email = import.meta.env.VITE_ADMIN_EMAIL;
-    const senha = import.meta.env.VITE_ADMIN_PASSWORD;
-    if (email === usuario.trim() && senha === password.trim()) {
-      navigate("/principal");
-    } else {
-      alert("Usuário ou senha incorretos");
+  useEffect(() => {
+    if (actionData?.error) {
       setUsuario("");
       setPassword("");
     }
-  };
+  }, [actionData]);
+
   return (
     <div className="flex flex-col gap-5 ">
       <div className="flex justify-center mt-15 lg:mt-25 ml-2 mr-2">
@@ -60,30 +65,39 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="shadow rounded-lg px-2 py-3 bg-foreground mt-4 w-[250px] md:w-[300px] lg:w-[400px] mx-auto flex flex-col gap-2 md:gap-4 shadow-destructive">
-        <Input
-          type="user"
-          placeholder="Usuário"
-          className="text-primary lg:text-lg xl:text-xl "
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Senha"
-          className="text-primary lg:text-lg xl:text-xl "
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <Button
-          onClick={() => login()}
-          type="submit"
-          className="bg-muted-foreground text-background lg:text-lg xl:text-xl "
+      <div>
+        <Form
+          method="post"
+          className="shadow rounded-lg px-2 py-3 bg-foreground mt-4 w-[250px] md:w-[300px] lg:w-[400px] mx-auto flex flex-col gap-2 md:gap-4 shadow-destructive"
         >
-          Entrar
-        </Button>
+          <Input
+            type="user"
+            name="email"
+            placeholder="Usuário"
+            className="text-primary lg:text-lg xl:text-xl "
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+          />
+          <Input
+            type="password"
+            name="senha"
+            placeholder="Senha"
+            className="text-primary lg:text-lg xl:text-xl"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <Button
+            type="submit"
+            className="bg-muted-foreground text-background lg:text-lg xl:text-xl "
+          >
+            Entrar
+          </Button>
+          {actionData?.error && (
+            <p className="text-red-500 text-center">{actionData.error}</p>
+          )}
+        </Form>
       </div>
     </div>
   );
