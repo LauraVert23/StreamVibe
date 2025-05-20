@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
-import { redirect, useActionData, useFetcher } from "react-router";
+import { redirect, useActionData } from "react-router";
 import Logo from "../images/Logo.png";
 import { Form } from "react-router";
 
@@ -20,7 +20,7 @@ export async function action({ request }: Route.ActionArgs) {
   if (email === usuario_email && senha === usuario_senha) {
     return redirect("/principal");
   } else {
-    return { error: "Email ou senha incorretos" };
+    return { error: "Email ou senha incorretos", redirect: false };
   }
 }
 
