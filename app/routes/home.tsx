@@ -2,9 +2,10 @@ import type { Route } from "./+types/home";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
-import { redirect, useActionData } from "react-router";
+import { redirect, useActionData, useNavigation } from "react-router";
 import Logo from "../images/Logo.png";
 import { Form } from "react-router";
+import { Loader2 } from "lucide-react";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
@@ -16,6 +17,7 @@ export async function action({ request }: Route.ActionArgs) {
   let formData = await request.formData();
   let usuario_email = formData.get("email");
   let usuario_senha = formData.get("senha");
+  //cookies para salvar usuário logado, ao invés de usar o .env
 
   if (email === usuario_email && senha === usuario_senha) {
     return redirect("/principal");
@@ -28,6 +30,7 @@ export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const actionData = useActionData();
+  const transition = useNavigation();
 
   useEffect(() => {
     if (actionData?.error) {
@@ -87,9 +90,12 @@ export default function Login() {
           />
           <Button
             type="submit"
-            className="bg-muted-foreground text-background lg:text-lg xl:text-xl "
+            className="bg-muted-foreground text-background lg:text-lg xl:text-xl cursor-pointer"
           >
             Entrar
+            {transition.state !== "idle" && (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            )}
           </Button>
           {actionData?.error && (
             <p className="text-red-500 text-center">{actionData.error}</p>
