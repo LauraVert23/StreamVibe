@@ -93,7 +93,7 @@ export default function Login() {
             className="bg-muted-foreground text-background lg:text-lg xl:text-xl cursor-pointer"
           >
             Entrar
-            {transition.state === "submitting" && (
+            {transition.state !== "idle" && (
               <Loader2 className="h-4 w-4 animate-spin" />
             )}
           </Button>
