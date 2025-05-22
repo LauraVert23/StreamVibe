@@ -12,7 +12,7 @@ const { getSession, commitSession, destroySession } = createCookieSessionStorage
     path: "/",
     sameSite: "lax",
     secrets: [process.env.SESSION_KEY!],
-    secure: false,
+    secure: true,
   },
 });
 
