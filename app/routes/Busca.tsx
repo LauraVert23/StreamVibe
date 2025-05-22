@@ -21,6 +21,7 @@ import {
 } from "~/components/ui/pagination";
 import React from "react";
 import { Skeleton } from "~/components/ui/skeleton";
+
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }

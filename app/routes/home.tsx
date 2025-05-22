@@ -3,7 +3,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
 import { useActionData, useNavigation } from "react-router";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import Logo from "../images/Logo.png";
 import { Form } from "react-router";
 import { Loader2 } from "lucide-react";
