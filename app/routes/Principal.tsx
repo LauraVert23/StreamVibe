@@ -2,17 +2,23 @@ import { CarouselDemo } from "~/components/Carrossel";
 import Menu from "~/components/Menu";
 import type { Route } from "./+types/home";
 import * as React from "react";
-import { Await, useLoaderData } from "react-router";
+import { Await, redirect, useLoaderData } from "react-router";
 import subContainer from "../images/Sub Container.png";
 import subContainer1 from "../images/Sub Container (1).png";
 import subContainer2 from "../images/Sub Container (2).png";
 import { SkeletonCard } from "~/components/SkeletonCard";
-
+import { getSession } from "~/sessions.server";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userAuth = session.get("auth");
+  if (!userAuth) {
+    return redirect("/");
+  }
+
   const res1 = await fetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`
   );

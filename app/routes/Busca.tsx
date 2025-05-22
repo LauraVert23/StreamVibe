@@ -1,5 +1,6 @@
 import {
   Await,
+  redirect,
   useLoaderData,
   useNavigate,
   useSearchParams,
@@ -25,6 +26,12 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
+  const { getSession } = await import("../sessions.server");
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("auth")) {
+    return redirect("/");
+  }
+
   const url = new URL(request.url);
   const searchParams = url.searchParams.get("q");
   const page = url.searchParams.get("page") || "1";

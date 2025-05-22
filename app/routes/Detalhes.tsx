@@ -1,4 +1,4 @@
-import { Await, useLoaderData } from "react-router";
+import { Await, redirect, useLoaderData } from "react-router";
 import { useLocalStorage, useMediaQuery } from "usehooks-ts";
 import Menu from "~/components/Menu";
 import type { detalhesProps } from "~/interfaces/detalhesProps";
@@ -35,7 +35,13 @@ import { Card, CardContent, CardDescription } from "~/components/ui/card";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
-export async function loader({ params }: { params: { id: string } }) {
+export async function loader({ request, params }: Route.LoaderArgs) {
+  const { getSession } = await import("../sessions.server");
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.get("auth")) {
+    return redirect("/");
+  }
+
   const filmeResponse = await fetch(
     `https://api.themoviedb.org/3/movie/${params.id}?api_key=${process.env.REACT_APP_API_KEY}`
   );

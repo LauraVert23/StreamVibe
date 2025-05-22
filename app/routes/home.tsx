@@ -2,27 +2,49 @@ import type { Route } from "./+types/home";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { useEffect, useState } from "react";
-import { redirect, useActionData, useNavigation } from "react-router";
+import { useActionData, useNavigation } from "react-router";
+import { redirect } from "@remix-run/node";
 import Logo from "../images/Logo.png";
 import { Form } from "react-router";
 import { Loader2 } from "lucide-react";
-
+import type { ActionFunctionArgs } from "react-router-dom";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
 
-export async function action({ request }: Route.ActionArgs) {
+import { getSession, commitSession } from "../sessions.server";
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userAuth = session.get("auth");
+  if (userAuth) {
+    return redirect("/principal");
+  }
+  return null;
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const formData = await request.formData();
+  const usuario_email = formData.get("email") as string | null;
+  const usuario_senha = formData.get("senha") as string | null;
+
   const email = import.meta.env.VITE_ADMIN_EMAIL;
   const senha = import.meta.env.VITE_ADMIN_PASSWORD;
-  let formData = await request.formData();
-  let usuario_email = formData.get("email");
-  let usuario_senha = formData.get("senha");
-  //cookies para salvar usuário logado, ao invés de usar o .env
 
-  if (email === usuario_email && senha === usuario_senha) {
-    return redirect("/principal");
+  if (usuario_email === email && usuario_senha === senha) {
+    session.set("auth", true);
+
+    return redirect("/principal", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   } else {
-    return { error: "Email ou senha incorretos", redirect: false };
+    session.set("auth", false);
+    return {
+      error: "Usuário ou senha inválidos.",
+    };
   }
 }
 
