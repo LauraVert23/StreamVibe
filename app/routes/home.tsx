@@ -12,8 +12,8 @@ export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
 
-import { getSession, commitSession } from "../sessions.server";
 export async function loader({ request }: Route.LoaderArgs) {
+  const { getSession } = await import("../sessions.server");
   const session = await getSession(request.headers.get("Cookie"));
   const userAuth = session.get("auth");
   if (userAuth) {
@@ -23,6 +23,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  const { getSession, commitSession } = await import("../sessions.server");
   const session = await getSession(request.headers.get("Cookie"));
 
   const formData = await request.formData();

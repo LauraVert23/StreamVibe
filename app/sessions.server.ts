@@ -11,7 +11,7 @@ const { getSession, commitSession, destroySession } = createCookieSessionStorage
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
     sameSite: "lax",
-    secrets: ["laura"],
+    secrets: [process.env.SESSION_KEY!],
     secure: false,
   },
 });

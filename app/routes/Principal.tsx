@@ -7,12 +7,12 @@ import subContainer from "../images/Sub Container.png";
 import subContainer1 from "../images/Sub Container (1).png";
 import subContainer2 from "../images/Sub Container (2).png";
 import { SkeletonCard } from "~/components/SkeletonCard";
-import { getSession } from "~/sessions.server";
 export function meta({}: Route.MetaArgs) {
   return [{ title: "StreamVibe" }];
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
+  const { getSession } = await import("../sessions.server");
   const session = await getSession(request.headers.get("Cookie"));
   const userAuth = session.get("auth");
   if (!userAuth) {
